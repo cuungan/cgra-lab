@@ -118,23 +118,32 @@ custom arithmetic
 
 For an AI-oriented CGRA, multiply-accumulate operations are particularly important because matrix and convolution workloads contain large numbers of multiply-accumulate operations.
 
-For example:
+For example, a simple computation can be expressed as:
 
 ```text
-y = a*x + b
+y = ReLU(a*x + b)
 ```
-
-can potentially be distributed across several PEs.
-
-A more complex computation can be spatially distributed:
+This computation can be represented as a Data Flow Graph (DFG), where each operation is represented as a node and data dependencies are represented as edges:
 
 ```text
-PE0        PE1        PE2        PE3
- │          │          │          │
-ADD  →     MUL  →     ADD  →     RELU
+       a          
+       │          
+       ▼          
+x ──> MUL ──> ADD ──> RELU ──> y
+               ▲
+               │
+               b
 ```
+The computation can then be spatially distributed across the CGRA:
 
-This is one of the fundamental differences between spatial architectures and conventional sequential execution.
+```text
+PE0       PE1        PE2
+ │         │          │
+MUL  ──>  ADD  ──>  RELU
+```
+Here, each operation is assigned to a different PE, while intermediate results are transferred between neighboring PEs through the configurable interconnect.
+
+This illustrates how a computation can be transformed from an application-level expression into a data-flow representation and subsequently mapped onto the spatial resources of a CGRA.
 
 ---
 
