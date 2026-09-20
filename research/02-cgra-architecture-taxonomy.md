@@ -169,7 +169,6 @@ A simplified model is:
 ```text
 PE ─── PE ─── PE
 │      │      │
-│      │      │
 PE ─── PE ─── PE
 │      │      │
 PE ─── PE ─── PE
@@ -282,9 +281,8 @@ This reduces the dimensionality of the routing problem.
 
 Potential advantages include:
 
-* simple interconnect
+* simple and regular interconnect
 * predictable data movement
-* low routing overhead
 * simple physical implementation
 * natural support for streaming pipelines
 
