@@ -156,7 +156,6 @@ A simple nearest-neighbor architecture might look like:
 ```text
         PE ─── PE ─── PE
          │     │     │
-         │     │     │
         PE ─── PE ─── PE
          │     │     │
         PE ─── PE ─── PE

@@ -9,7 +9,7 @@ This project explores the design principles, architecture, programming models, a
 The long-term goal is to develop a small experimental CGRA architecture and implement a CGLA prototype on FPGA.
 
 The project will progress from architectural research to RTL implementation, mapping, and AI workloads.
-
+```text
 Roadmap
 CGRA Research
       │
@@ -44,7 +44,7 @@ MLIR and accelerator compilation
 AI/ML acceleration
 Low-power accelerator architectures
 CGLA
-
+```
 The CGLA architecture will serve as a simple experimental platform for exploring CGRA concepts.
 
 Initial research will investigate:
@@ -70,6 +70,7 @@ Small ML models
 Lightweight speech-processing workloads
 Moonshine and similar compact speech-recognition models
 Project Structure
+```text
 cgra-lab/
 │
 ├── research/          # CGRA research and technical notes
@@ -84,6 +85,7 @@ cgra-lab/
 ├── models/            # AI models and model experiments
 ├── benchmarks/        # Performance and resource benchmarks
 └── docs/              # Additional documentation
+```
 Status
 
 Phase 0 — Research
