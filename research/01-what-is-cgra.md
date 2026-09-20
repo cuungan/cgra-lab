@@ -229,7 +229,8 @@ Given an application or computational kernel, the compiler must determine:
 4. how memory accesses should be scheduled,
 5. whether the computation fits within the available hardware resources.
 
-A common representation of the application is a **Data Dependence Graph (DDG)**.
+A common representation of the computation is a **Data Flow Graph (DFG)**, which
+represents operations as nodes and their data dependencies as edges.
 
 For example:
 
@@ -244,25 +245,24 @@ For example:
      SUB
 ```
 
-The compiler attempts to map this computation onto the CGRA:
+The compiler attempts to map this computation onto the CGRA.
+
+A simple spatial-temporal mapping can be illustrated as:
 
 ```text
 Cycle 0
-
-PE0 = input A
-PE1 = input B
+    PE0 = LOAD A
+    PE1 = LOAD B
 
 Cycle 1
-
-PE0 = MUL
-PE1 = ADD
+    PE0 = MUL
+    PE1 = ADD
 
 Cycle 2
-
-PE2 = SUB
+    PE2 = SUB
 ```
-
-The exact mapping depends on the architecture and its available resources.
+The mapping must satisfy both computation dependencies and architectural
+constraints such as PE availability, operation latency and communication paths.
 
 Modern CGRA research therefore treats mapping as a central compiler problem involving scheduling, placement and routing.
 
@@ -382,7 +382,7 @@ A simplified comparison is:
 | CGRA         | Medium–High |                 High |                    High |
 | ASIC         |         Low |            Very High |               Very High |
 
-These categories are qualitative rather than absolute. Actual performance and energy efficiency depend strongly on the workload and implementation.
+These categories are qualitative rather than absolute. Actual performance, energy efficiency, area and programmability depend strongly on the workload, architecture, technology and implementation.
 
 ---
 
@@ -451,7 +451,7 @@ Application
 Intermediate Representation
      │
      ▼
-Data Dependence Graph
+Data Flow Graph
      │
      ▼
 Scheduling
@@ -533,6 +533,8 @@ The goal is to investigate whether a simpler one-dimensional architecture can pr
 * low hardware overhead,
 * and sufficient computational density for selected AI workloads.
 
+The linear topology is deliberately chosen as a first experimental point in the CGRA design space rather than as a claim that linear arrays are generally superior to two-dimensional or more highly connected architectures.
+
 The CGLA architecture will therefore be treated as an experimental research platform rather than as a replacement definition for CGRA.
 
 ---
@@ -588,9 +590,9 @@ A model such as Moonshine may eventually be investigated, but only after the und
 
 ## 16. Summary
 
-CGRA provides a middle ground between programmable processors and fixed-function accelerators.
+CGRA architectures occupy a design space between programmable processors and fixed-function accelerators, combining spatial computation with reconfigurable hardware resources.
 
-Its key characteristics are:
+Their key characteristics include:
 
 * spatial computation,
 * coarse-grained processing elements,
@@ -605,7 +607,7 @@ The real challenge is designing the complete system:
 
 > **Architecture + Memory + Interconnect + Mapping + Compiler + Workload**
 
-This project will use that principle as the foundation for exploring a small, practical CGLA-based accelerator.
+This project will use these principles as the foundation for exploring a small, practical CGLA-based accelerator.
 
 ## Initial References
 
