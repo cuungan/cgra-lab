@@ -176,15 +176,22 @@ Therefore:
 
 ## 6. Configuration
 
-A CGRA does not normally execute a traditional instruction stream in the same way as a CPU.
+Unlike a conventional CPU, a CGRA typically exposes computation through spatial
+configuration of processing elements and data paths rather than relying primarily
+on a sequential instruction stream.
 
-Instead, configuration information determines:
+However, CGRA execution and configuration models vary significantly between
+architectures. Some CGRAs use a relatively static configuration for a kernel,
+while others support temporal configuration changes or instruction-driven control.
+
+Instead, configuration information may determine:
 
 * which operation each PE performs,
 * which inputs are selected,
+* how data moves between PEs,
 * where results are sent,
 * how memory accesses are performed,
-* and sometimes how the architecture behaves over multiple cycles.
+* and, depending on the architecture, how configuration changes over multiple cycles.
 
 The configuration may be stored in configuration memory.
 
