@@ -76,12 +76,12 @@ The first CGLA will consist of a chain of processing elements.
 ```text
                     CGLA
 
-        ┌────┐    ┌────┐    ┌────┐    ┌────┐
-Input ─►│ PE0│───►│ PE1│───►│ PE2│───►│ PE3│───► Output
-        └────┘    └────┘    └────┘    └────┘
-           │         │         │         │
-           ▼         ▼         ▼         ▼
-         Regs      Regs      Regs      Regs
+         ┌────┐    ┌────┐    ┌────┐    
+Input ──►│PE0 │───►│PE1 │───►│PE2 │───► Output 
+         └────┘    └────┘    └────┘    
+            │         │         │      
+            ▼         ▼         ▼      
+          Regs      Regs      Regs     
 ```
 
 Each PE performs a coarse-grained operation on 16-bit data.
@@ -92,11 +92,10 @@ The basic communication model is:
 PE[i] ↔ PE[i+1]
 ```
 
-The initial implementation will primarily use forward streaming.
+The initial workloads will primarily use forward streaming, while the interconnect supports bidirectional communication between neighboring PEs.
 
 Later versions may add:
 
-* bidirectional communication,
 * bypass paths,
 * broadcast,
 * multicast,
@@ -120,12 +119,12 @@ Input A ─────►│                         │
               │       Input MUX         │
 Input B ─────►│            │            │
               │            ▼            │
-              │      Functional Unit   │
+              │      Functional Unit    │
               │            │            │
               │            ▼            │
-              │      Output Register   │
+              │      Output Register    │
               │                         │
-Config ──────►│      Control Logic     │
+Config ──────►│      Control Logic      │
               └───────────┬─────────────┘
                           │
                           ▼
@@ -306,36 +305,33 @@ Each PE will initially expose:
 ```text
 left_in
 right_in
-local_in
 result
 ```
 
 Conceptually:
 
 ```text
-                 local input
-                     │
-                     ▼
-left_in ───────► Input MUX ─────► FU ─────► result
-                     ▲
-                     │
-right_in ────────────┘
+left_in ──────► Input MUX ────► ALU/MAC ────► result
+                    ▲
+                    │
+right_in ───────────┘
 ```
 
 The PE can therefore select operands from:
 
-* the previous PE,
-* the next PE,
+* the left neighboring PE,
+* the right neighboring PE,
 * local registers,
 * external input.
 
-The first implementation may simplify the physical connection to forward streaming:
+The initial workloads will primarily use forward streaming:
 
 ```text
 PE0 → PE1 → PE2 → PE3
 ```
 
-while keeping the RTL interface extensible.
+The underlying nearest-neighbor interconnect remains bidirectional,
+allowing data to move between adjacent PEs in either direction.
 
 ---
 
@@ -365,38 +361,21 @@ Interconnect is a significant architectural cost in CGRAs, so restricting connec
 
 # 12. Interconnect Version 1
 
-The first implementation will use:
-
-```text
-forward path
-+
-local feedback
-```
+The first implementation will use a bidirectional nearest-neighbor
+interconnect between adjacent PEs.
 
 Conceptually:
 
-```text
-        ┌────┐      ┌────┐      ┌────┐
-───────►│ PE │─────►│ PE │─────►│ PE │──────►
-        └─┬──┘      └─┬──┘      └─┬──┘
-          │           │           │
-          └───────────┘           │
-              local feedback      │
-```
+PE0 ↔ PE1 ↔ PE2 ↔ PE3
 
-The exact feedback structure will be finalized during RTL design.
+Each PE can receive data from its left and right neighboring PE.
+The initial workloads will primarily use forward streaming:
 
-A later version can introduce:
+PE0 → PE1 → PE2 → PE3
 
-```text
-PE[i] ↔ PE[i+1]
-```
-
-instead of only:
-
-```text
-PE[i] → PE[i+1]
-```
+This provides a simple and regular communication structure while
+keeping the RTL interface extensible for future architectural
+extensions.
 
 ---
 
