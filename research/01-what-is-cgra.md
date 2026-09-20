@@ -267,15 +267,10 @@ The compiler then maps these operations onto the available processing elements (
 
 ```text
 Cycle 0
-    PE0 = LOAD A
-    PE1 = LOAD B
-    PE2 = LOAD C
+    PE0 = MUL(A, B)
 
 Cycle 1
-    PE0 = MUL
-
-Cycle 2
-    PE1 = ADD
+    PE1 = ADD(MUL_result, C)
 ```
 
 In this example, the intermediate result produced by PE0 must be transferred to PE1 through the CGRA interconnect before the ADD operation can be completed.
