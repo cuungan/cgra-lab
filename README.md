@@ -1,6 +1,6 @@
 # CGRA Lab
 
-Exploring Coarse-Grained Reconfigurable Architectures (CGRA) and building a CGLA (LA here is Linear Array) based AI accelerator prototype on FPGA.
+Exploring Coarse-Grained Reconfigurable Architectures (CGRA) and building a CGLA ("LA" here is Linear Array) based AI accelerator prototype on FPGA.
 
 ## Project Goal
 This project explores the design principles, architecture, programming models, and implementation challenges of CGRAs, with a particular focus on low-power AI acceleration.
