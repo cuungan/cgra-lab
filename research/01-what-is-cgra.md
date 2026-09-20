@@ -210,9 +210,9 @@ Configuration
      │
      ▼
 ┌─────────────────────────────┐
-│ PE configuration             │
-│ Interconnect configuration   │
-│ Memory configuration         │
+│ PE configuration            │
+│ Interconnect configuration  │
+│ Memory configuration        │
 └─────────────────────────────┘
      │
      ▼
@@ -231,8 +231,8 @@ One of the most important problems in CGRA research is **mapping**.
 
 Given an application or computational kernel, the compiler must determine:
 
-1. which operation should execute on which PE,
-2. at which cycle the operation should execute,
+1. which operation should be executed on which PE,
+2. at which cycle the operation should be executed,
 3. how data should travel between PEs,
 4. how memory accesses should be scheduled,
 5. whether the computation fits within the available hardware resources.
@@ -240,35 +240,46 @@ Given an application or computational kernel, the compiler must determine:
 A common representation of the computation is a **Data Flow Graph (DFG)**, which
 represents operations as nodes and their data dependencies as edges.
 
-For example:
+For example, consider the following computation:
 
 ```text
-      A
-     / \
-    ▼   ▼
-   MUL  ADD
-    │    │
-    └─┬──┘
-      ▼
-     SUB
+Y = (A × B) + C
 ```
 
-The compiler attempts to map this computation onto the CGRA.
+This computation can be represented as a DFG:
 
-A simple spatial-temporal mapping can be illustrated as:
+```text
+A ──┐
+    │
+    ▼
+   MUL ──┐
+    ▲    │
+    │    ▼
+B ──┘   ADD ──> Y
+          ▲
+          │
+          C
+```
+
+The DFG captures the dependencies between operations. The ADD operation cannot be executed until the result of the MUL operation is available.
+
+The compiler then maps these operations onto the available processing elements (PEs). A simple spatial-temporal mapping can be illustrated as:
 
 ```text
 Cycle 0
     PE0 = LOAD A
     PE1 = LOAD B
+    PE2 = LOAD C
 
 Cycle 1
     PE0 = MUL
-    PE1 = ADD
 
 Cycle 2
-    PE2 = SUB
+    PE1 = ADD
 ```
+
+In this example, the intermediate result produced by PE0 must be transferred to PE1 through the CGRA interconnect before the ADD operation can be completed.
+
 The mapping must satisfy both computation dependencies and architectural
 constraints such as PE availability, operation latency and communication paths.
 
@@ -481,7 +492,7 @@ This is one of the most important concepts for the `cgra-lab` project.
 
 The project should therefore not become only an RTL implementation.
 
-The longer-term objective should be to explore the complete stack:
+The longer-term objective will be to explore the complete stack:
 
 ```text
 Application
